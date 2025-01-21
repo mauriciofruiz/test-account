@@ -11,7 +11,7 @@ RUN ./gradlew build -x test --continue
 FROM amazoncorretto:17-alpine3.20
 
 WORKDIR /app
-COPY --from=builder /app/build/libs/test-0.0.1-SNAPSHOT.jar .
+COPY --from=builder /app/build/libs/test-account-0.0.1-SNAPSHOT.jar .
 
 RUN apk update && \
     apk add --no-cache tzdata && \
@@ -25,4 +25,4 @@ LABEL version="1.0" \
       description="Test Account Application" \
       maintainer="Mauricio Ruiz <m4dicio@gmail.com>"
 
-CMD ["java", "-jar", "test-account-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "test-account-0.0.1-SNAPSHOT.jar", "--spring.profiles.active=docker"]

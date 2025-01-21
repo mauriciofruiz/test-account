@@ -17,9 +17,23 @@ public class Preference implements Serializable {
 
     private final Properties properties = new Properties();
 
+    private final Environment environment;
+
+    @Autowired
+    public Preference(Environment environment) {
+        this.environment = environment;
+    }
+
     @PostConstruct
     private void loadProperties() {
+        String activeProfile = environment.getProperty("spring.profiles.active");
+        if ("docker".equals(activeProfile)) {
+            log.info("*********Container**********");
+            loadPropertiesFromResource("/external-service-docker.properties");
+        } else {
+            log.info("*********Local**********");
             loadPropertiesFromResource("/external-service.properties");
+        }
     }
 
     private void loadPropertiesFromResource(String resourcePath) {
